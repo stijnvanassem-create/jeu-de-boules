@@ -35,11 +35,8 @@ button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
 #title{background:none;border:0;padding:6px 0;font-size:21px;font-weight:900;letter-spacing:.3px;color:#fff;white-space:nowrap}
 #title .dot{display:inline-block;width:.7em;height:.7em;border-radius:50%;margin-right:6px;vertical-align:-1px;
   background:radial-gradient(circle at 35% 30%,#fff,var(--silver) 40%,var(--steel))}
-.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 12px;font-weight:900;
-  font-variant-numeric:tabular-nums;background:rgba(0,0,0,.28);color:#fff;font-size:16px;white-space:nowrap}
-.chip.warn{background:var(--warn);color:#1C0F00}.chip.danger{background:#fff;color:var(--red)}
-#totalClock[hidden]{display:none}
-
+.hbtn{width:42px;height:42px;border-radius:50%;border:2px solid #fff;background:rgba(0,0,0,.22);color:#fff;font-size:22px;font-weight:900;flex:none}
+.hbtn.on{background:#fff;color:var(--terra)}
 /* main + nav */
 #view{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 14px 16px}
 #view.fit{display:flex;flex-direction:column;gap:9px;padding-top:10px;padding-bottom:10px}
@@ -77,24 +74,16 @@ h2{margin:4px 0 12px;font-size:24px}
 .pill{border-radius:12px;padding:7px 4px;text-align:center;font-weight:900;font-size:14px;background:var(--card);border:2px solid var(--sand2);color:var(--ink2)}
 .pill.on{background:var(--ink);border-color:var(--ink);color:#fff;font-size:16px}
 .pill.done{border-color:var(--olive);color:var(--olive)}
-.timer{display:flex;align-items:center;gap:8px;background:var(--ink);color:#fff;border-radius:var(--r);padding:6px 6px 6px 14px}
-.timer .lbl{font-size:12px;font-weight:800;opacity:.8;text-transform:uppercase;letter-spacing:.8px}
-.tt{flex:1;font-size:42px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
-.timer.warn{background:var(--warn);color:#1C0F00}
-.timer.danger{background:var(--red);animation:pulse 1s infinite}
-@keyframes pulse{50%{filter:brightness(1.35)}}
-.tbtn{min-height:54px;min-width:78px;border-radius:14px;border:0;background:var(--sand);color:var(--ink);font-weight:900;font-size:17px;box-shadow:0 3px 0 rgba(0,0,0,.4)}
-.tbtn.go{background:#2E9E4A;color:#fff}
 .team{--tc:var(--a);--tcd:var(--a-d);background:var(--card);border-radius:var(--r);padding:10px;border:3px solid var(--tc);box-shadow:0 4px 0 var(--tcd)}
 .team.t1{--tc:var(--b);--tcd:var(--b-d)}
 .th{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .who{display:flex;flex-direction:column;gap:5px;min-width:0}
 .pl{display:flex;align-items:center;gap:8px;font-weight:900;font-size:18px;white-space:nowrap}
 .pl .av{--s:32px}
-.sc{font-size:clamp(58px,18vw,90px);font-weight:900;line-height:.85;color:var(--tc);font-variant-numeric:tabular-nums;padding-right:4px}
+.sc{font-size:clamp(64px,20vw,100px);font-weight:900;line-height:.85;color:var(--tc);font-variant-numeric:tabular-nums;padding-right:4px}
 .team.lead .sc{text-shadow:0 3px 0 rgba(0,0,0,.12)}
 .pts{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:9px}
-.pts button{min-height:54px;border-radius:14px;border:0;background:var(--tc);color:#fff;font-size:22px;font-weight:900;box-shadow:0 3px 0 var(--tcd);padding:0}
+.pts button{min-height:62px;border-radius:14px;border:0;background:var(--tc);color:#fff;font-size:22px;font-weight:900;box-shadow:0 3px 0 var(--tcd);padding:0}
 .log{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;min-height:40px;align-items:center}
 .log::-webkit-scrollbar{display:none}
 .log .m{flex:none;border-radius:10px;padding:5px 9px;font-weight:900;font-size:15px;color:#fff;font-variant-numeric:tabular-nums;line-height:1.1;text-align:center}
@@ -126,6 +115,10 @@ h2{margin:4px 0 12px;font-size:24px}
 .res .sco{font-size:22px;font-weight:900;font-variant-numeric:tabular-nums;white-space:nowrap}
 .hist{padding:10px 0;border-top:2px dashed var(--sand2)}
 .hist:first-of-type{border-top:0}
+.help h3{margin:0 0 8px;font-size:20px;text-transform:none;letter-spacing:0;color:var(--terra)}
+.help p,.help li{font-size:17px;font-weight:600;line-height:1.45;margin:0 0 8px}
+.help ul,.help ol{padding-left:22px;margin:0 0 4px}
+.help b{font-weight:900}
 
 /* start screen */
 .hero{text-align:center;padding:6px 0 12px}
@@ -208,10 +201,7 @@ body.retro{--sand:#14121F;--sand2:#3A3456;--card:#221E35;--ink:#F6EFD8;--ink2:#C
 body.retro{--a:var(--terra);--a-d:var(--terra-d);--b:var(--olive);--b-d:var(--olive-d)}
 body.retro #tabs button{color:#F6EFD8}
 body.retro #tabs button.on{color:#000}
-body.retro .timer,body.retro .pill.on,body.retro .seg button.on,body.retro .res .rn,body.retro .badge,body.retro .sched b,body.retro .toast,body.retro .skip{background:#000;color:#F6EFD8}
-body.retro .timer.warn{background:#FFB000;color:#000}
-body.retro .timer.danger{background:var(--red);color:#fff}
-body.retro .tbtn{background:#F6EFD8;color:#000}
+body.retro .pill.on,body.retro .seg button.on,body.retro .res .rn,body.retro .badge,body.retro .sched b,body.retro .toast,body.retro .skip{background:#000;color:#F6EFD8}
 body.retro .pts button,body.retro .btn{color:#000}
 body.retro .btn.ghost{color:var(--ink)}
 body.retro .av{border-color:#000}
@@ -221,7 +211,7 @@ body.retro .av{border-color:#000}
 <div id="app">
   <header id="top">
     <button id="title" aria-label="Jeu de Boules"><span class="dot"></span>Jeu de Boules</button>
-    <div id="totalClock" class="chip" hidden></div>
+    <button class="hbtn" id="helpBtn" data-act="tab" data-v="help" aria-label="Uitleg">?</button>
   </header>
   <main id="view"></main>
   <nav id="tabs">
@@ -250,7 +240,7 @@ const SCHEDULE = [
 ];
 const KEY = 'boules-state-v1';
 const DEFAULTS = {
-  settings: { target: 11, roundMin: 25, totalMin: 90, losersZero: false, retro: false },
+  settings: { retro: false },
   t: null, history: [], tab: 'start', rankTab: 'now',
 };
 
@@ -282,11 +272,6 @@ function av(id, cls = '') {
 }
 const teamName = team => team.map(id => P[id].name).join(' & ');
 const score = r => r.menes.reduce((s, m) => (s[m.team] += m.pts, s), [0, 0]);
-const sign = n => n > 0 ? '+' + n : n < 0 ? '−' + Math.abs(n) : '0';
-function fmt(ms) {
-  const neg = ms < 0, t = Math.ceil(Math.abs(ms) / 1000);
-  return (neg ? '+' : '') + String(Math.floor(t / 60)).padStart(2, '0') + ':' + String(t % 60).padStart(2, '0');
-}
 function toast(txt, cls = '') {
   const d = document.createElement('div');
   d.className = 'toast ' + cls; d.textContent = txt;
@@ -308,77 +293,64 @@ function ask({ title, body = '', ok = 'OK', cancel = 'Annuleer', danger = false 
 }
 
 /* ---------- standings ---------- */
-function standings(t, losersZero = S.settings.losersZero) {
+function standings(t) {
+  // Everyone gets the points their team scored. Most points wins; ties: most rounds won, then head-to-head.
   const st = {}, h2h = {};
-  PLAYERS.forEach(p => st[p.id] = { id: p.id, saldo: 0, w: 0, l: 0, d: 0, pf: 0, pa: 0, fanny: 0, played: 0 });
+  PLAYERS.forEach(p => st[p.id] = { id: p.id, pf: 0, pa: 0, w: 0, l: 0, d: 0, fanny: 0, played: 0 });
   t.rounds.forEach((r, i) => {
     if (!r.done && !r.menes.length) return;       // not started: doesn't count
-    const sc = score(r), diff = Math.abs(sc[0] - sc[1]);
-    const lead = sc[0] > sc[1] ? 0 : sc[1] > sc[0] ? 1 : -1;
+    const sc = score(r), lead = sc[0] > sc[1] ? 0 : sc[1] > sc[0] ? 1 : -1;
     SCHEDULE[i].forEach((team, ti) => {
       const my = sc[ti], op = sc[1 - ti];
-      const pts = lead === -1 ? 0 : lead === ti ? diff : (losersZero ? 0 : -diff);
       team.forEach(pid => {
         const s = st[pid];
-        s.saldo += pts; s.pf += my; s.pa += op;
+        s.pf += my; s.pa += op;
         if (r.done) {
           s.played++;
           if (lead === -1) s.d++;
           else if (lead === ti) s.w++;
           else { s.l++; if (my === 0) s.fanny++; }
         }
-        SCHEDULE[i][1 - ti].forEach(o => h2h[pid + '|' + o] = (h2h[pid + '|' + o] || 0) + pts);
+        SCHEDULE[i][1 - ti].forEach(o => h2h[pid + '|' + o] = (h2h[pid + '|' + o] || 0) + my - op);
       });
     });
   });
   const hh = (a, b) => (h2h[b.id + '|' + a.id] || 0) - (h2h[a.id + '|' + b.id] || 0);
-  const arr = Object.values(st).sort((a, b) => b.saldo - a.saldo || b.pf - a.pf || hh(a, b));
+  const arr = Object.values(st).sort((a, b) => b.pf - a.pf || b.w - a.w || hh(a, b));
   arr.forEach((s, i) => {
     const p = arr[i - 1];
-    s.pos = p && p.saldo === s.saldo && p.pf === s.pf && hh(p, s) === 0 ? p.pos : i + 1;
+    s.pos = p && p.pf === s.pf && p.w === s.w && hh(p, s) === 0 ? p.pos : i + 1;
   });
   return arr;
 }
 function allTime() {
   const st = {};
-  PLAYERS.forEach(p => st[p.id] = { id: p.id, saldo: 0, w: 0, l: 0, d: 0, pf: 0, pa: 0, fanny: 0, wins: 0, n: 0 });
+  PLAYERS.forEach(p => st[p.id] = { id: p.id, w: 0, l: 0, d: 0, pf: 0, pa: 0, fanny: 0, wins: 0, n: 0 });
   S.history.forEach(h => {
     h.standings.forEach(s => {
       const a = st[s.id]; if (!a) return;
-      ['saldo', 'w', 'l', 'd', 'pf', 'pa', 'fanny'].forEach(k => a[k] += s[k] || 0);
+      ['w', 'l', 'd', 'pf', 'pa', 'fanny'].forEach(k => a[k] += s[k] || 0);
       a.n++;
     });
     if (h.winner && st[h.winner]) st[h.winner].wins++;
   });
-  const arr = Object.values(st).sort((a, b) => b.saldo - a.saldo || b.wins - a.wins || b.pf - a.pf);
-  arr.forEach((s, i) => { const p = arr[i - 1]; s.pos = p && p.saldo === s.saldo && p.wins === s.wins && p.pf === s.pf ? p.pos : i + 1; });
+  const arr = Object.values(st).sort((a, b) => b.pf - a.pf || b.wins - a.wins || b.w - a.w);
+  arr.forEach((s, i) => { const p = arr[i - 1]; s.pos = p && p.pf === s.pf && p.wins === s.wins && p.w === s.w ? p.pos : i + 1; });
   return arr;
 }
 
 /* ---------- tournament actions ---------- */
-const newRound = () => ({ menes: [], done: false, acc: 0, since: null, endedBy: null });
+const newRound = () => ({ menes: [], done: false, endedBy: null });
 function startTournament() {
   S.t = { id: Date.now(), startedAt: Date.now(), current: 0, finished: false, rounds: SCHEDULE.map(newRound) };
   S.tab = 'round'; save(); render(); wake();
 }
 const curRound = () => S.t && !S.t.finished ? S.t.rounds[S.t.current] : null;
-const roundLeft = r => S.settings.roundMin * 60000 - (r.acc + (r.since ? Date.now() - r.since : 0));
-function pauseTimer(r) { if (r.since) { r.acc += Date.now() - r.since; r.since = null; } }
-
-async function addMene(ti, pts) {
+function addMene(ti, pts) {
   const r = curRound(); if (!r || r.done) return;
   r.menes.push({ team: ti, pts, at: Date.now() });
   save(); render();
-  const sc = score(r), tgt = S.settings.target;
-  const reached = sc[0] >= tgt || sc[1] >= tgt;
-  FX.mene(ti, pts, sc, reached);
-  if (reached) {
-    const w = sc[0] >= tgt ? 0 : 1;
-    const ok = await ask({ title: `${teamName(SCHEDULE[S.t.current][w])} ${sc[w]}!`,
-      body: `Doelscore ${tgt} bereikt. Stand ${sc[0]}–${sc[1]}. Ronde afsluiten?`,
-      ok: 'Ronde afsluiten', cancel: 'Oeps, undo' });
-    if (ok) closeRound('doel'); else undo(true);
-  }
+  FX.mene(ti, pts, score(r));
 }
 async function undo(silent) {
   const t = S.t; if (!t || t.finished) return;
@@ -387,13 +359,13 @@ async function undo(silent) {
   if (t.current > 0) {
     const prev = t.rounds[t.current - 1], sc = score(prev);
     if (await ask({ title: `Ronde ${t.current} heropenen?`, body: `Die eindigde ${sc[0]}–${sc[1]}. Je gaat terug naar die ronde.`, ok: 'Heropenen' })) {
-      pauseTimer(r); t.current--; prev.done = false; prev.endedBy = null; save(); render();
+      t.current--; prev.done = false; prev.endedBy = null; save(); render();
     }
   }
 }
 function closeRound(reason) {
   const t = S.t, r = t.rounds[t.current];
-  pauseTimer(r); r.done = true; r.endedBy = reason;
+  r.done = true; r.endedBy = reason;
   const idx = t.current, sc = score(r);
   if (t.current < SCHEDULE.length - 1) { t.current++; save(); render(); toast(`Ronde ${t.current + 1} — ${teamName(SCHEDULE[t.current][0])} vs ${teamName(SCHEDULE[t.current][1])}`); }
   else finishTournament();
@@ -402,11 +374,10 @@ function closeRound(reason) {
 function finishTournament() {
   const t = S.t;
   t.finished = true; t.finishedAt = Date.now();
-  t.rounds.forEach(pauseTimer);
   const st = standings(t);
   t.final = st;
   S.history.push({
-    id: t.id, date: t.startedAt, winner: st[0].id, losersZero: S.settings.losersZero,
+    id: t.id, date: t.startedAt, winner: st[0].id,
     standings: st.map(s => ({ ...s })),
     rounds: t.rounds.map((r, i) => ({ teams: SCHEDULE[i], score: score(r), played: r.done })),
   });
@@ -420,49 +391,9 @@ async function endNow() {
     ? `Ronde ${t.current + 1} telt mee met de huidige stand ${sc[0]}–${sc[1]}. Rondes daarna vervallen.`
     : `Ronde ${t.current + 1}${t.current < 2 ? ' en verder' : ''} ${t.current < 2 ? 'vervallen' : 'vervalt'}.`;
   if (!await ask({ title: 'Eindstand nu?', body, ok: 'Afsluiten' })) return;
-  if (r.menes.length) { pauseTimer(r); r.done = true; r.endedBy = 'vroeg'; }
+  if (r.menes.length) { r.done = true; r.endedBy = 'vroeg'; }
   finishTournament();
 }
-
-/* ---------- timer ---------- */
-let lastVib = null, timeUpOpen = false;
-async function timeUp(r) {
-  if (timeUpOpen || r.done) return;
-  timeUpOpen = true;
-  navigator.vibrate?.([400, 150, 400, 150, 600]);
-  const sc = score(r), teams = SCHEDULE[S.t.current];
-  const body = sc[0] === sc[1] ? `Gelijkspel ${sc[0]}–${sc[1]}. Dat blijft gelijkspel.`
-    : `${teamName(teams[sc[0] > sc[1] ? 0 : 1])} staat voor en wint ${Math.max(...sc)}–${Math.min(...sc)}.`;
-  if (sc[0] === sc[1]) bigText('Égalité', 'egal', 1800);
-  const ok = await ask({ title: '⏰ Tijd!', body, ok: 'Ronde afsluiten', cancel: 'Mène afmaken' });
-  timeUpOpen = false;
-  if (ok && curRound() === r && !r.done) closeRound('tijd');
-}
-function tick() {
-  const t = S.t, tc = $('#totalClock');
-  if (t && !t.finished) {
-    const left = S.settings.totalMin * 60000 - (Date.now() - t.startedAt);
-    tc.hidden = false;
-    tc.textContent = (left < 0 ? 'Totaal over ' : 'Totaal ') + fmt(left).replace('+', '');
-    tc.className = 'chip' + (left <= 0 ? ' danger' : left <= 10 * 60000 ? ' warn' : '');
-  } else tc.hidden = true;
-  const r = curRound(); if (!r) return;
-  let left = roundLeft(r);
-  if (r.since && left <= 0) { r.acc = S.settings.roundMin * 60000; r.since = null; left = 0; save(); updTimerBtn(r); timeUp(r); }
-  if (r.since && left > 0 && left <= 30000) {
-    const sec = Math.ceil(left / 1000);
-    if (sec !== lastVib && (sec % 5 === 0 || sec <= 5)) { lastVib = sec; navigator.vibrate?.(sec <= 5 ? 150 : 80); }
-  }
-  const box = $('#timer'); if (!box) return;
-  $('#tt').textContent = fmt(Math.max(0, left));
-  box.className = 'timer' + (left <= 30000 ? ' danger' : left <= 120000 ? ' warn' : '');
-}
-function updTimerBtn(r) {
-  const b = $('#tbtn'); if (!b) return;
-  b.textContent = r.since ? 'Pauze' : roundLeft(r) <= 0 ? 'Klaar' : 'Start';
-  b.classList.toggle('go', !r.since);
-}
-setInterval(tick, 250);
 
 /* ---------- wake lock ---------- */
 let wl = null;
@@ -479,23 +410,15 @@ document.addEventListener('visibilitychange', wake);
 
 /* ---------- views ---------- */
 function vStart() {
-  const st = S.settings, t = S.t, active = t && !t.finished;
-  return `<div class="hero"><h1>Jeu de Boules</h1><p>Americano · 4 spelers · 3 rondes</p></div>
+  const t = S.t, active = t && !t.finished;
+  return `<div class="hero"><h1>Jeu de Boules</h1><p>4 spelers · 3 rondes · iedereen speelt één keer met iedereen</p></div>
   <div class="four">${PLAYERS.map(p => `<div>${av(p.id)}${p.name}</div>`).join('')}</div>
   ${active ? `<div class="stack" style="margin-bottom:14px"><button class="btn big olive" data-act="tab" data-v="round">▶ Verder spelen · ronde ${t.current + 1}</button>
      <button class="btn ghost" data-act="newT">Nieuw toernooi beginnen</button></div>`
     : `<div style="margin-bottom:14px"><button class="btn big" data-act="start">Start</button></div>`}
-  <div class="card"><h3>Instellingen</h3>
-    <div class="opt"><label>Doelscore</label><div class="seg">${[9, 11, 13].map(n =>
-      `<button class="${st.target === n ? 'on' : ''}" data-act="set" data-k="target" data-v="${n}">${n}</button>`).join('')}</div></div>
-    <div class="opt"><label>Rondetijd</label><div class="step"><button data-act="step" data-k="roundMin" data-d="-1" aria-label="minder">−</button>
-      <output>${st.roundMin} min</output><button data-act="step" data-k="roundMin" data-d="1" aria-label="meer">+</button></div></div>
-    <div class="opt"><label>Totale tijd</label><div class="step"><button data-act="step" data-k="totalMin" data-d="-5" aria-label="minder">−</button>
-      <output>${st.totalMin} min</output><button data-act="step" data-k="totalMin" data-d="5" aria-label="meer">+</button></div></div>
-    <div class="opt"><label>Verliezers krijgen 0</label><button class="sw" role="switch" aria-checked="${st.losersZero}" data-act="toggleZero" aria-label="Verliezers krijgen 0"></button></div>
-  </div>
+  <div style="margin-bottom:14px"><button class="btn ghost" style="width:100%" data-act="tab" data-v="help">❓ Hoe werkt het?</button></div>
   <div class="card sched"><h3>Speelschema</h3>${SCHEDULE.map((r, i) =>
-    `<div><b>R${i + 1}</b>${teamName(r[0])} <span class="muted">vs</span> ${teamName(r[1])}</div>`).join('')}</div>
+    `<div><b>R${i + 1}</b><span>${teamName(r[0])}<br><span class="muted">vs</span> ${teamName(r[1])}</span></div>`).join('')}</div>
   <div class="card"><h3>Opnieuw</h3><div class="stack">
     <button class="btn ghost" data-act="reset" ${t ? '' : 'disabled'}>Reset toernooi</button>
     <button class="btn danger" data-act="wipe" ${S.history.length ? '' : 'disabled'}>Wis ook de historie (${S.history.length})</button>
@@ -521,8 +444,6 @@ function vRound() {
       const s = score(x);
       return `<div class="pill ${k === i ? 'on' : ''} ${x.done ? 'done' : ''}">${x.done ? `✓ ${s[0]}–${s[1]}` : `Ronde ${k + 1}`}</div>`;
     }).join('')}</div>
-  <div class="timer" id="timer"><div style="flex:1"><div class="lbl">Ronde ${i + 1} van 3</div><div class="tt" id="tt">--:--</div></div>
-    <button class="tbtn" id="tbtn" data-act="tToggle">Start</button><button class="tbtn" data-act="tReset" aria-label="Timer resetten">↺</button></div>
   ${team(0)}
   <div class="log" id="log">${log}</div>
   ${team(1)}
@@ -533,11 +454,11 @@ function rankRows(arr, { live = false, finished = false } = {}) {
   const lastPos = Math.max(...arr.map(s => s.pos));
   const crown = s => !finished || lastPos === 1 ? '' : s.pos === 1 ? '<span class="crown">👑</span>'
     : s.pos === lastPos ? '<span class="crown down" title="Laatste">👑</span>' : '';
-  return arr.map((s, i) => `<div class="rrow ${s.pos === 1 && (finished || arr.some(x => x.saldo)) ? 'first' : ''}">
+  return arr.map((s, i) => `<div class="rrow ${s.pos === 1 && (finished || arr.some(x => x.pf)) ? 'first' : ''}">
     <div class="pos">${s.pos}</div>${av(s.id, 'md')}
     <div class="nm">${crown(s)}${P[s.id].name}${s.fanny ? `<span class="badge">FANNY${s.fanny > 1 ? ' ×' + s.fanny : ''}</span>` : ''}
-      <small>${s.w}W ${s.l}V${s.d ? ' ' + s.d + 'G' : ''}<br>${s.pf} voor · ${s.pa} tegen</small></div>
-    <div class="saldo ${s.saldo > 0 ? 'pos' : s.saldo < 0 ? 'neg' : ''}">${sign(s.saldo)}<small>saldo</small></div></div>`).join('');
+      <small>${s.w}&nbsp;gewonnen · ${s.l}&nbsp;verloren${s.d ? " · " + s.d + "&nbsp;gelijk" : ""}</small></div>
+    <div class="saldo">${s.pf}<small>punten</small></div></div>`).join('');
 }
 function resultsList(t) {
   return t.rounds.map((r, i) => {
@@ -557,12 +478,12 @@ function vRank() {
     return seg + `<p class="muted" style="margin:0 0 10px">${S.history.length} toernooi${S.history.length > 1 ? 'en' : ''} gespeeld</p>
       ${at.map(s => `<div class="rrow ${s.pos === 1 ? 'first' : ''}"><div class="pos">${s.pos}</div>${av(s.id, 'md')}
         <div class="nm">${P[s.id].name}${s.wins ? `<span class="badge" style="background:var(--gold);color:#1C0F00">🏆×${s.wins}</span>` : ''}${s.fanny ? `<span class="badge">FANNY ×${s.fanny}</span>` : ''}
-        <small>${s.w}W ${s.l}V${s.d ? ' ' + s.d + 'G' : ''}<br>${s.pf} voor · ${s.pa} tegen</small></div>
-        <div class="saldo ${s.saldo > 0 ? 'pos' : s.saldo < 0 ? 'neg' : ''}">${sign(s.saldo)}<small>saldo</small></div></div>`).join('')}
+        <small>${s.w}&nbsp;gewonnen · ${s.l}&nbsp;verloren${s.d ? " · " + s.d + "&nbsp;gelijk" : ""}</small></div>
+        <div class="saldo">${s.pf}<small>punten</small></div></div>`).join('')}
       <div class="card" style="margin-top:14px"><h3>Gespeelde toernooien</h3>${S.history.slice().reverse().map(h =>
         `<div class="hist"><div class="row spread"><b>${new Date(h.date).toLocaleDateString('nl-NL', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}</b>
           <span class="row" style="gap:6px">🏆 ${av(h.winner, 'sm')} <b>${P[h.winner].name}</b></span></div>
-          <div class="muted" style="font-size:14px;margin-top:4px">${h.standings.map(s => `${P[s.id].name} ${sign(s.saldo)}`).join(' · ')}</div></div>`).join('')}</div>`;
+          <div class="muted" style="font-size:14px;margin-top:4px">${h.standings.map(s => `${P[s.id].name} ${s.pf}`).join(' · ')}</div></div>`).join('')}</div>`;
   }
   const t = S.t;
   if (!t) return seg + `<div class="empty"><p>Geen lopend toernooi.</p><button class="btn" data-act="start">Start toernooi</button></div>`;
@@ -573,11 +494,40 @@ function vRank() {
     ${t.finished ? '' : `<button class="btn big ghost" data-act="endNow">🏁 Eindstand nu</button>`}`;
 }
 
+function vHelp() {
+  return `<div class="help">
+  <h2>Hoe werkt het?</h2>
+  <div class="card"><h3>Americano, wat is dat?</h3>
+    <p>Een toernooivorm voor vier spelers waarin de teams elke ronde wisselen. Je speelt 2 tegen 2, en in drie rondes heb je met iedereen één keer samen gespeeld.</p>
+    <p>Het klassement is <b>per speler</b>, niet per team. Het draait dus om hoe jij het doet, met wisselende maatjes.</p></div>
+  <div class="card sched"><h3>Het schema</h3>${SCHEDULE.map((r, i) =>
+    `<div><b>R${i + 1}</b><span>${teamName(r[0])}<br><span class="muted">vs</span> ${teamName(r[1])}</span></div>`).join('')}</div>
+  <div class="card"><h3>Punten tellen</h3>
+    <ol><li>Speel een mène: iedereen gooit zijn ballen.</li>
+    <li>Het team met de bal het dichtst bij het buutje (cochonnet) wint de mène.</li>
+    <li>Dat team krijgt 1 punt voor elke bal die dichter ligt dan de beste bal van de tegenstander. Maximaal 6.</li>
+    <li>Tik bij dat team op <b>+1</b> t/m <b>+6</b>. Vergist? <b>Undo</b> haalt de laatste mène weg.</li></ol>
+    <p>Jullie bepalen zelf wanneer een ronde klaar is. Tik dan op <b>Ronde afsluiten</b> en de volgende ronde begint.</p></div>
+  <div class="card"><h3>Het klassement</h3>
+    <p>Iedereen krijgt de punten die zijn team in een ronde scoorde. Wie na drie rondes de meeste punten heeft, wint.</p>
+    <p>Gelijk? Dan telt wie de meeste rondes won, en daarna het onderlinge resultaat.</p>
+    <p>Stoppen jullie eerder? In <b>Klassement</b> zit de knop <b>Eindstand nu</b>.</p></div>
+  <div class="card"><h3>Fanny</h3>
+    <p>Verlies je een ronde met 0 punten, dan ben je <b>Fanny</b>. Dat blijft als badge achter je naam staan. Volgens de traditie mag je daarna het achterwerk van Fanny kussen…</p></div>
+  <div class="card"><h3>Handig om te weten</h3>
+    <ul><li>Alles wordt op deze telefoon bewaard. Per ongeluk weggeklikt? De stand komt terug.</li>
+    <li><b>Reset toernooi</b> staat onderaan op Start. Het all-time klassement blijft dan staan.</li>
+    <li>Het scherm blijft aan zolang er een toernooi loopt.</li>
+    <li>Hier en daar zit een Franse verrassing verstopt. 🇫🇷</li></ul></div>
+  <button class="btn big" data-act="tab" data-v="${S.t && !S.t.finished ? 'round' : 'start'}">${S.t && !S.t.finished ? '▶ Terug naar de ronde' : 'Naar start'}</button>
+  </div>`;
+}
+
 function vEnd() {
   const t = S.t, st = standings(t), top = st.filter(s => s.pos === 1);
   return `<div class="winner"><div class="lbl">${top.length > 1 ? 'Gedeelde winst' : 'Winnaar'}</div>
       <div class="avs"><div><span class="kroon">👑</span>${top.map(s => av(s.id, top.length > 1 ? 'lg' : 'xl')).join('')}</div></div>
-      <h1>${top.map(s => P[s.id].name).join(' & ')}</h1><div class="sub">${sign(top[0].saldo)} saldo</div></div>
+      <h1>${top.map(s => P[s.id].name).join(' & ')}</h1><div class="sub">${top[0].pf} punten</div></div>
     ${rankRows(st, { finished: true })}
     <div class="stack" style="margin:14px 0"><button class="btn big olive" data-act="shareImg">📸 Opslaan als afbeelding</button></div>
     <div class="card"><h3>Uitslagen per ronde</h3>${resultsList(t)}</div>
@@ -641,8 +591,7 @@ function confetti(ms = 3800) {
     requestAnimationFrame(f);
   })(t0);
 }
-FX.mene = (ti, pts, sc, reached) => {
-  if (reached) return;                                   // the round-end dialog takes over
+FX.mene = (ti, pts, sc) => {
   if (sc[0] === sc[1]) return bigText('Égalité', 'egal', 1800);
   if (Math.random() < 0.1) return carreau();
   if (Math.random() < 0.2) toast(COMMENTS[Math.random() * COMMENTS.length | 0], 'fr');
@@ -701,7 +650,7 @@ async function buildEndImage(t) {
   x.font = `100px ${F}`; x.fillText('👑', W / 2, 290);
   avatar(st[0].id, W / 2, 450, 130, 12);
   x.fillStyle = '#23160C'; x.font = `900 92px ${F}`; x.fillText(P[st[0].id].name, W / 2, 660);
-  x.fillStyle = '#4F5C1A'; x.font = `900 44px ${F}`; x.fillText(`${sign(st[0].saldo)} saldo`, W / 2, 728);
+  x.fillStyle = '#4F5C1A'; x.font = `900 44px ${F}`; x.fillText(`${st[0].pf} punten`, W / 2, 728);
   st.forEach((s, i) => {
     const y = 800 + i * 150;
     x.fillStyle = '#FFF9EC'; x.strokeStyle = i === 0 ? '#D39A12' : '#E6CFA0'; x.lineWidth = 5;
@@ -711,9 +660,10 @@ async function buildEndImage(t) {
     x.textAlign = 'left'; x.font = `900 50px ${F}`;
     const last = i === st.length - 1 && s.pos !== 1;
     x.fillText(P[s.id].name + (s.fanny ? '  ·  FANNY' : ''), 300, y + 48);
-    x.fillStyle = '#4A3424'; x.font = `800 32px ${F}`; x.fillText(`${s.w}W ${s.l}V${s.d ? ' ' + s.d + 'G' : ''}  ·  ${s.pf} voor · ${s.pa} tegen`, 300, y + 96);
-    x.textAlign = 'right'; x.font = `900 70px ${F}`; x.fillStyle = s.saldo > 0 ? '#4F5C1A' : s.saldo < 0 ? '#C8161D' : '#23160C';
-    x.fillText(sign(s.saldo), W - 90, y + 67);
+    x.fillStyle = '#4A3424'; x.font = `800 32px ${F}`; x.fillText(`${s.w} gewonnen · ${s.l} verloren${s.d ? ' · ' + s.d + ' gelijk' : ''}`, 300, y + 96);
+    x.textAlign = 'right'; x.font = `900 70px ${F}`; x.fillStyle = '#23160C';
+    x.fillText(s.pf, W - 90, y + 58);
+    x.font = `800 22px ${F}`; x.fillStyle = '#4A3424'; x.fillText('PUNTEN', W - 90, y + 106);
     if (last) { x.save(); x.translate(W - 300, y + 65); x.rotate(Math.PI); x.font = `52px ${F}`; x.textAlign = 'center'; x.fillText('👑', 0, 0); x.restore(); }
   });
   x.textAlign = 'left'; x.fillStyle = '#23160C';
@@ -754,11 +704,10 @@ function render() {
   $('#roundTabLbl').textContent = S.t?.finished ? 'Uitslag' : S.t ? `Ronde ${S.t.current + 1}` : 'Ronde';
   const v = $('#view');
   v.className = S.tab === 'round' && S.t && !S.t.finished ? 'fit' : '';
-  v.innerHTML = S.tab === 'start' ? vStart() : S.tab === 'round' ? vRound() : vRank();
+  v.innerHTML = S.tab === 'start' ? vStart() : S.tab === 'round' ? vRound() : S.tab === 'help' ? vHelp() : vRank();
+  $('#helpBtn').classList.toggle('on', S.tab === 'help');
   const lg = $('#log'); if (lg) lg.scrollLeft = lg.scrollWidth;
-  const r = curRound(); if (r) updTimerBtn(r);
   if (S.tab === 'round' && S.t?.finished) prepEndImage();
-  tick();
 }
 
 const ACTIONS = {
@@ -768,12 +717,6 @@ const ACTIONS = {
     if (S.t && !S.t.finished && !await ask({ title: 'Nieuw toernooi?', body: 'Het lopende toernooi wordt gewist (niet opgeslagen).', ok: 'Nieuw', danger: true })) return;
     startTournament();
   },
-  set: b => { S.settings[b.dataset.k] = +b.dataset.v; save(); render(); },
-  step: b => {
-    const k = b.dataset.k, lim = k === 'roundMin' ? [1, 90] : [10, 240];
-    S.settings[k] = Math.min(lim[1], Math.max(lim[0], S.settings[k] + +b.dataset.d)); save(); render();
-  },
-  toggleZero: () => { S.settings.losersZero = !S.settings.losersZero; save(); render(); },
   mene: b => addMene(+b.dataset.t, +b.dataset.n),
   undo: () => undo(),
   closeRound: async () => {
@@ -782,15 +725,6 @@ const ACTIONS = {
     const tm = SCHEDULE[S.t.current];
     const who = sc[0] === sc[1] ? 'Gelijkspel' : `${teamName(tm[sc[0] > sc[1] ? 0 : 1])} wint`;
     if (await ask({ title: 'Ronde afsluiten?', body: `${who}, ${sc[0]}–${sc[1]}.`, ok: 'Afsluiten' })) closeRound('hand');
-  },
-  tToggle: () => {
-    const r = curRound(); if (!r) return;
-    if (r.since) pauseTimer(r); else if (roundLeft(r) > 0) r.since = Date.now(); else return toast('Tijd is op — reset de klok');
-    save(); updTimerBtn(r); tick(); wake();
-  },
-  tReset: async () => {
-    const r = curRound(); if (!r) return;
-    if (await ask({ title: 'Klok resetten?', body: `Terug naar ${S.settings.roundMin}:00.`, ok: 'Reset' })) { r.acc = 0; r.since = null; lastVib = null; save(); render(); }
   },
   rankTab: b => { S.rankTab = b.dataset.v; save(); render(); },
   endNow: () => endNow(),
@@ -815,9 +749,6 @@ document.addEventListener('click', e => {
   if (b && !b.disabled) ACTIONS[b.dataset.act]?.(b);
   wake();
 });
-// keep the round timer honest when coming back to the app
-document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') tick(); });
-
 render();
 if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 </script>
