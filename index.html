@@ -164,6 +164,57 @@ h2{margin:4px 0 12px;font-size:24px}
 .toast{position:absolute;left:50%;top:calc(env(safe-area-inset-top) + 70px);transform:translateX(-50%);background:var(--ink);color:#fff;
   font-weight:900;font-size:20px;padding:12px 20px;border-radius:16px;white-space:nowrap;animation:toast 2s ease forwards}
 @keyframes toast{0%{opacity:0;transform:translate(-50%,-12px)}10%,80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+.toast.fr{font-style:italic;background:var(--card);color:var(--terra);border:3px solid var(--terra);font-size:24px;font-family:Georgia,"Times New Roman",serif}
+
+/* easter eggs */
+.layer{position:absolute;inset:0;pointer-events:auto;overflow:hidden}
+.big{position:absolute;left:0;right:0;top:38%;text-align:center;font-weight:900;pointer-events:none;animation:bigIn 2.2s ease forwards}
+.big span{display:inline-block;padding:14px 26px;border-radius:24px;border:4px solid currentColor;background:var(--card);box-shadow:0 8px 0 rgba(0,0,0,.25)}
+.big.fanny{top:30%;font-size:64px;color:#D6246E}
+.big.fanny .avs{display:flex;justify-content:center;gap:10px;margin-top:14px}
+.big.egal{font-size:44px;color:var(--steel);font-family:Georgia,serif;font-style:italic}
+@keyframes bigIn{0%{transform:scale(.3) rotate(-8deg);opacity:0}12%{transform:scale(1.12) rotate(2deg);opacity:1}20%{transform:scale(1) rotate(0)}85%{opacity:1}100%{opacity:0;transform:scale(1.05)}}
+.carreau{position:absolute;left:0;right:0;top:40%;height:120px}
+.carreau .b1,.carreau .b2{position:absolute;top:30px;width:60px;height:60px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#fff,var(--silver) 35%,var(--steel) 85%);box-shadow:0 4px 0 rgba(0,0,0,.25)}
+.carreau .b2{left:calc(50% - 30px);animation:hit2 1.4s ease-out forwards}
+.carreau .b1{left:-70px;animation:hit1 1.4s ease-out forwards}
+.carreau .word{position:absolute;left:0;right:0;top:-34px;text-align:center;font-size:46px;font-weight:900;color:var(--terra);
+  font-family:Georgia,serif;font-style:italic;opacity:0;animation:word 1.4s ease forwards}
+@keyframes hit1{0%{left:-70px}30%{left:calc(50% - 30px)}100%{left:calc(50% - 30px);opacity:.9}}
+@keyframes hit2{0%,29%{left:calc(50% - 30px);opacity:1}70%{left:120%;transform:rotate(280deg)}100%{left:130%;opacity:0}}
+@keyframes word{0%,28%{opacity:0;transform:scale(.4)}40%{opacity:1;transform:scale(1.2)}55%,85%{opacity:1;transform:scale(1)}100%{opacity:0}}
+.rain{position:absolute;top:-60px;font-size:34px;font-weight:900;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(calc(100vh + 120px)) rotate(var(--rot))}}
+.skip{position:absolute;bottom:calc(env(safe-area-inset-bottom) + 80px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;
+  font-weight:900;border-radius:99px;padding:8px 16px;font-size:14px;opacity:.85}
+.crown{display:inline-block;margin-right:4px}
+.crown.down{transform:rotate(180deg);filter:grayscale(.3)}
+
+/* end screen */
+.winner{text-align:center;padding:4px 0 14px}
+.winner .lbl{font-weight:900;text-transform:uppercase;letter-spacing:2px;color:var(--terra)}
+.winner .avs{display:flex;justify-content:center;gap:10px;margin:10px 0 4px;position:relative}
+.winner .av{box-shadow:0 0 0 4px var(--gold),0 8px 0 rgba(0,0,0,.15)}
+.winner h1{margin:4px 0 0;font-size:44px;line-height:1.05}
+.winner .sub{font-weight:900;font-size:20px;color:var(--olive)}
+.winner .kroon{font-size:44px;display:block;margin-bottom:-14px;animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px) rotate(-6deg)}}
+
+/* retro: seven taps on the title */
+body.retro{--sand:#14121F;--sand2:#3A3456;--card:#221E35;--ink:#F6EFD8;--ink2:#CFC6E6;--terra:#FF5A4E;--terra-d:#9E1F16;
+  --olive:#1FC8B4;--olive-d:#0B6B60;--gold:#FFD23F;--steel:#A7A1C9;--head:#6A2C91;--nav:#000;--red:#FF3B5C;
+  font-family:"Courier New",ui-monospace,monospace}
+body.retro{--a:var(--terra);--a-d:var(--terra-d);--b:var(--olive);--b-d:var(--olive-d)}
+body.retro #tabs button{color:#F6EFD8}
+body.retro #tabs button.on{color:#000}
+body.retro .timer,body.retro .pill.on,body.retro .seg button.on,body.retro .res .rn,body.retro .badge,body.retro .sched b,body.retro .toast,body.retro .skip{background:#000;color:#F6EFD8}
+body.retro .timer.warn{background:#FFB000;color:#000}
+body.retro .timer.danger{background:var(--red);color:#fff}
+body.retro .tbtn{background:#F6EFD8;color:#000}
+body.retro .pts button,body.retro .btn{color:#000}
+body.retro .btn.ghost{color:var(--ink)}
+body.retro .av{border-color:#000}
 </style>
 </head>
 <body>
@@ -382,6 +433,7 @@ async function timeUp(r) {
   const sc = score(r), teams = SCHEDULE[S.t.current];
   const body = sc[0] === sc[1] ? `Gelijkspel ${sc[0]}–${sc[1]}. Dat blijft gelijkspel.`
     : `${teamName(teams[sc[0] > sc[1] ? 0 : 1])} staat voor en wint ${Math.max(...sc)}–${Math.min(...sc)}.`;
+  if (sc[0] === sc[1]) bigText('Égalité', 'egal', 1800);
   const ok = await ask({ title: '⏰ Tijd!', body, ok: 'Ronde afsluiten', cancel: 'Mène afmaken' });
   timeUpOpen = false;
   if (ok && curRound() === r && !r.done) closeRound('tijd');
@@ -478,9 +530,12 @@ function vRound() {
 }
 
 function rankRows(arr, { live = false, finished = false } = {}) {
+  const lastPos = Math.max(...arr.map(s => s.pos));
+  const crown = s => !finished || lastPos === 1 ? '' : s.pos === 1 ? '<span class="crown">👑</span>'
+    : s.pos === lastPos ? '<span class="crown down" title="Laatste">👑</span>' : '';
   return arr.map((s, i) => `<div class="rrow ${s.pos === 1 && (finished || arr.some(x => x.saldo)) ? 'first' : ''}">
     <div class="pos">${s.pos}</div>${av(s.id, 'md')}
-    <div class="nm">${P[s.id].name}${s.fanny ? `<span class="badge">FANNY${s.fanny > 1 ? ' ×' + s.fanny : ''}</span>` : ''}
+    <div class="nm">${crown(s)}${P[s.id].name}${s.fanny ? `<span class="badge">FANNY${s.fanny > 1 ? ' ×' + s.fanny : ''}</span>` : ''}
       <small>${s.w}W ${s.l}V${s.d ? ' ' + s.d + 'G' : ''}<br>${s.pf} voor · ${s.pa} tegen</small></div>
     <div class="saldo ${s.saldo > 0 ? 'pos' : s.saldo < 0 ? 'neg' : ''}">${sign(s.saldo)}<small>saldo</small></div></div>`).join('');
 }
@@ -519,10 +574,177 @@ function vRank() {
 }
 
 function vEnd() {
-  const t = S.t, st = standings(t);
-  return `<div class="hero"><p>Toernooi afgelopen</p><h1>🏆 ${P[st[0].id].name}</h1></div>
+  const t = S.t, st = standings(t), top = st.filter(s => s.pos === 1);
+  return `<div class="winner"><div class="lbl">${top.length > 1 ? 'Gedeelde winst' : 'Winnaar'}</div>
+      <div class="avs"><div><span class="kroon">👑</span>${top.map(s => av(s.id, top.length > 1 ? 'lg' : 'xl')).join('')}</div></div>
+      <h1>${top.map(s => P[s.id].name).join(' & ')}</h1><div class="sub">${sign(top[0].saldo)} saldo</div></div>
     ${rankRows(st, { finished: true })}
-    <div class="stack" style="margin-top:14px"><button class="btn big" data-act="newT">Nieuw toernooi</button></div>`;
+    <div class="stack" style="margin:14px 0"><button class="btn big olive" data-act="shareImg">📸 Opslaan als afbeelding</button></div>
+    <div class="card"><h3>Uitslagen per ronde</h3>${resultsList(t)}</div>
+    <div class="stack"><button class="btn big" data-act="newT">Nieuw toernooi</button>
+      <button class="btn ghost" data-act="party">🎉 Nog een keer confetti</button></div>`;
+}
+
+/* ---------- easter eggs ---------- */
+const COMMENTS = ['Magnifique !', 'Oh là là !', 'Tirez !', 'Magnifique !', 'Oh là là !', 'Tirez !', 'Bien joué !', 'Quel pointeur !'];
+function layer(ms, skippable) {
+  const l = document.createElement('div');
+  l.className = 'layer';
+  if (!skippable) l.style.pointerEvents = 'none';
+  else { l.innerHTML = '<div class="skip">Tik om over te slaan</div>'; l.onclick = e => { e.stopPropagation(); l.remove(); }; }
+  $('#fx').appendChild(l);
+  setTimeout(() => l.remove(), ms);
+  return l;
+}
+function bigText(html, cls, ms = 2300, skippable = false) {
+  const l = layer(ms, skippable);
+  l.insertAdjacentHTML('afterbegin', `<div class="big ${cls}"><span>${html}</span></div>`);
+}
+function carreau() {
+  const l = layer(1500, false);
+  l.innerHTML = '<div class="carreau"><div class="word">Carreau !</div><div class="b2"></div><div class="b1"></div></div>';
+  navigator.vibrate?.(40);
+}
+function rain(chars, ms = 3500) {
+  const l = layer(ms + 1200, true);
+  for (let i = 0; i < 46; i++) {
+    const s = document.createElement('span');
+    s.className = 'rain';
+    s.textContent = chars[i % chars.length];
+    s.style.left = Math.random() * 96 + '%';
+    s.style.fontSize = 24 + Math.random() * 26 + 'px';
+    s.style.color = ['var(--terra)', 'var(--olive)', 'var(--steel)', 'var(--gold)'][i % 4];
+    s.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+    s.style.animationDuration = 1.6 + Math.random() * 1.6 + 's';
+    s.style.animationDelay = Math.random() * (ms / 1000 - 1.6) + 's';
+    l.appendChild(s);
+  }
+}
+function confetti(ms = 3800) {
+  const l = layer(ms, true), c = document.createElement('canvas');
+  c.style.cssText = 'position:absolute;inset:0;width:100%;height:100%';
+  l.prepend(c);
+  const dpr = devicePixelRatio || 1, W = c.width = innerWidth * dpr, H = c.height = innerHeight * dpr, x = c.getContext('2d');
+  const cols = ['#B8471F', '#4F5C1A', '#BAC1C7', '#D39A12', '#F4E6C8', '#2B5A86'];
+  const ps = Array.from({ length: 160 }, () => ({
+    x: W / 2 + (Math.random() - .5) * W * .3, y: H * .35, vx: (Math.random() - .5) * 18 * dpr, vy: (-Math.random() * 16 - 6) * dpr,
+    w: (6 + Math.random() * 8) * dpr, h: (4 + Math.random() * 6) * dpr, r: Math.random() * 6, vr: (Math.random() - .5) * .4, c: cols[Math.random() * cols.length | 0],
+  }));
+  const t0 = performance.now();
+  (function f(now) {
+    if (!l.isConnected || now - t0 > ms) return;
+    x.clearRect(0, 0, W, H);
+    ps.forEach(p => {
+      p.vy += .45 * dpr; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      x.save(); x.translate(p.x, p.y); x.rotate(p.r); x.fillStyle = p.c; x.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); x.restore();
+    });
+    requestAnimationFrame(f);
+  })(t0);
+}
+FX.mene = (ti, pts, sc, reached) => {
+  if (reached) return;                                   // the round-end dialog takes over
+  if (sc[0] === sc[1]) return bigText('Égalité', 'egal', 1800);
+  if (Math.random() < 0.1) return carreau();
+  if (Math.random() < 0.2) toast(COMMENTS[Math.random() * COMMENTS.length | 0], 'fr');
+};
+FX.roundClosed = (idx, sc) => {
+  const lo = sc[0] < sc[1] ? 0 : sc[1] < sc[0] ? 1 : -1;
+  if (lo >= 0 && sc[lo] === 0) {
+    navigator.vibrate?.([100, 60, 100, 60, 300]);
+    const html = `FANNY !<div class="avs">${SCHEDULE[idx][lo].map(id => av(id, 'lg')).join('')}</div>`;
+    setTimeout(() => bigText(html, 'fanny', 3200, true), 250);
+  }
+};
+FX.finished = st => {
+  const w = st[0].id, solo = !st[1] || st[1].pos !== 1;
+  setTimeout(() => {
+    confetti();
+    if (solo && w === 'mrneus') setTimeout(() => rain(['👃']), 600);
+    if (solo && w === 'tobihash') setTimeout(() => rain(['#']), 600);
+  }, 300);
+};
+let taps = 0, tapT = 0;
+FX.titleTap = () => {
+  const now = Date.now();
+  taps = now - tapT < 1500 ? taps + 1 : 1; tapT = now;
+  if (taps >= 7) {
+    taps = 0; S.settings.retro = !S.settings.retro; save(); render();
+    toast(S.settings.retro ? '🕹️ Mode rétro' : 'Retour au soleil ☀️');
+  }
+};
+
+/* ---------- end screen image ---------- */
+let endImg = null;   // { id, blob }
+function loadImg(src) {
+  return new Promise(res => { const i = new Image(); i.onload = () => res(i.naturalWidth ? i : null); i.onerror = () => res(null); i.src = src; });
+}
+async function buildEndImage(t) {
+  const st = standings(t), W = 1080, H = 1560, c = document.createElement('canvas');
+  c.width = W; c.height = H;
+  const x = c.getContext('2d'), F = 'ui-rounded, "SF Pro Rounded", system-ui, -apple-system, Roboto, sans-serif';
+  const imgs = {};
+  await Promise.all(PLAYERS.map(async p => imgs[p.id] = failed.has(p.id) ? null : await loadImg(`players/${p.id}.jpg`)));
+  const avatar = (id, cx, cy, r, ring) => {
+    x.save(); x.beginPath(); x.arc(cx, cy, r + ring, 0, 7); x.fillStyle = ring > 6 ? '#D39A12' : '#23160C'; x.fill();
+    x.beginPath(); x.arc(cx, cy, r, 0, 7); x.clip();
+    const im = imgs[id];
+    if (im) { const s = Math.min(im.naturalWidth, im.naturalHeight); x.drawImage(im, (im.naturalWidth - s) / 2, (im.naturalHeight - s) / 2, s, s, cx - r, cy - r, r * 2, r * 2); }
+    else { x.fillStyle = P[id].color; x.fillRect(cx - r, cy - r, r * 2, r * 2); x.fillStyle = '#fff'; x.font = `900 ${r}px ${F}`; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(P[id].name[0].toUpperCase(), cx, cy + r * .06); }
+    x.restore();
+  };
+  x.fillStyle = '#F4E6C8'; x.fillRect(0, 0, W, H);
+  x.fillStyle = '#B8471F'; x.fillRect(0, 0, W, 150);
+  x.fillStyle = '#fff'; x.textBaseline = 'middle'; x.textAlign = 'left'; x.font = `900 60px ${F}`; x.fillText('Jeu de Boules', 60, 78);
+  x.textAlign = 'right'; x.font = `800 34px ${F}`;
+  x.fillText(new Date(t.startedAt).toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' }), W - 60, 80);
+  x.textAlign = 'center'; x.fillStyle = '#B8471F'; x.font = `900 36px ${F}`; x.fillText('W I N N A A R', W / 2, 215);
+  x.font = `100px ${F}`; x.fillText('👑', W / 2, 290);
+  avatar(st[0].id, W / 2, 450, 130, 12);
+  x.fillStyle = '#23160C'; x.font = `900 92px ${F}`; x.fillText(P[st[0].id].name, W / 2, 660);
+  x.fillStyle = '#4F5C1A'; x.font = `900 44px ${F}`; x.fillText(`${sign(st[0].saldo)} saldo`, W / 2, 728);
+  st.forEach((s, i) => {
+    const y = 800 + i * 150;
+    x.fillStyle = '#FFF9EC'; x.strokeStyle = i === 0 ? '#D39A12' : '#E6CFA0'; x.lineWidth = 5;
+    x.beginPath(); x.roundRect(50, y, W - 100, 130, 28); x.fill(); x.stroke();
+    x.fillStyle = '#23160C'; x.textAlign = 'center'; x.font = `900 60px ${F}`; x.fillText(s.pos, 115, y + 67);
+    avatar(s.id, 225, y + 65, 46, 4);
+    x.textAlign = 'left'; x.font = `900 50px ${F}`;
+    const last = i === st.length - 1 && s.pos !== 1;
+    x.fillText(P[s.id].name + (s.fanny ? '  ·  FANNY' : ''), 300, y + 48);
+    x.fillStyle = '#4A3424'; x.font = `800 32px ${F}`; x.fillText(`${s.w}W ${s.l}V${s.d ? ' ' + s.d + 'G' : ''}  ·  ${s.pf} voor · ${s.pa} tegen`, 300, y + 96);
+    x.textAlign = 'right'; x.font = `900 70px ${F}`; x.fillStyle = s.saldo > 0 ? '#4F5C1A' : s.saldo < 0 ? '#C8161D' : '#23160C';
+    x.fillText(sign(s.saldo), W - 90, y + 67);
+    if (last) { x.save(); x.translate(W - 300, y + 65); x.rotate(Math.PI); x.font = `52px ${F}`; x.textAlign = 'center'; x.fillText('👑', 0, 0); x.restore(); }
+  });
+  x.textAlign = 'left'; x.fillStyle = '#23160C';
+  t.rounds.forEach((r, i) => {
+    const sc = score(r), y = 1430 + i * 44;
+    x.font = `800 30px ${F}`;
+    x.fillText(`R${i + 1}  ${teamName(SCHEDULE[i][0])} vs ${teamName(SCHEDULE[i][1])}`, 60, y);
+    x.textAlign = 'right'; x.font = `900 32px ${F}`; x.fillText(r.done ? `${sc[0]}–${sc[1]}` : '–', W - 60, y); x.textAlign = 'left';
+  });
+  return new Promise(res => c.toBlob(res, 'image/png'));
+}
+function prepEndImage() {
+  const t = S.t;
+  if (!t?.finished || endImg?.id === t.id + ':' + t.finishedAt) return;
+  const id = t.id + ':' + t.finishedAt;
+  endImg = { id, blob: null };
+  buildEndImage(t).then(b => { if (endImg?.id === id) endImg.blob = b; }).catch(() => {});
+}
+async function shareEndImage() {
+  if (!endImg?.blob) { prepEndImage(); return toast('Even geduld…'); }
+  const name = `boules-${new Date(S.t.startedAt).toISOString().slice(0, 10)}.png`;
+  const file = new File([endImg.blob], name, { type: 'image/png' });
+  if (navigator.canShare?.({ files: [file] })) {
+    try { await navigator.share({ files: [file], title: 'Jeu de Boules — eindstand' }); return; }
+    catch (e) { if (e.name === 'AbortError') return; }
+  }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(endImg.blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  toast('📸 Afbeelding opgeslagen');
 }
 
 /* ---------- render + events ---------- */
@@ -535,6 +757,7 @@ function render() {
   v.innerHTML = S.tab === 'start' ? vStart() : S.tab === 'round' ? vRound() : vRank();
   const lg = $('#log'); if (lg) lg.scrollLeft = lg.scrollWidth;
   const r = curRound(); if (r) updTimerBtn(r);
+  if (S.tab === 'round' && S.t?.finished) prepEndImage();
   tick();
 }
 
@@ -571,6 +794,8 @@ const ACTIONS = {
   },
   rankTab: b => { S.rankTab = b.dataset.v; save(); render(); },
   endNow: () => endNow(),
+  shareImg: () => shareEndImage(),
+  party: () => FX.finished(standings(S.t)),
   reset: async () => {
     if (await ask({ title: 'Reset toernooi?', body: 'Het lopende toernooi wordt gewist. Het all-time klassement blijft staan.', ok: 'Reset', danger: true })) {
       S.t = null; save(); releaseWake(); render(); toast('Toernooi gereset');
