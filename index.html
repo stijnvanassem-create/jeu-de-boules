@@ -168,11 +168,11 @@ h2{margin:4px 0 12px;font-size:24px}
 
 /* easter eggs */
 .layer{position:absolute;inset:0;pointer-events:auto;overflow:hidden}
-.big{position:absolute;left:0;right:0;top:38%;text-align:center;font-weight:900;pointer-events:none;animation:bigIn 2.2s ease forwards}
-.big span{display:inline-block;padding:14px 26px;border-radius:24px;border:4px solid currentColor;background:var(--card);box-shadow:0 8px 0 rgba(0,0,0,.25)}
-.big.fanny{top:30%;font-size:64px;color:#D6246E}
-.big.fanny .avs{display:flex;justify-content:center;gap:10px;margin-top:14px}
-.big.egal{font-size:44px;color:var(--steel);font-family:Georgia,serif;font-style:italic}
+.bigfx{position:absolute;left:0;right:0;top:38%;text-align:center;font-weight:900;pointer-events:none;animation:bigIn 2.2s ease forwards}
+.bigfx span{display:inline-block;padding:14px 26px;border-radius:24px;border:4px solid currentColor;background:var(--card);box-shadow:0 8px 0 rgba(0,0,0,.25)}
+.bigfx.fanny{top:30%;font-size:64px;color:#D6246E}
+.bigfx.fanny .avs{display:flex;justify-content:center;gap:10px;margin-top:14px}
+.bigfx.egal{font-size:44px;color:var(--steel);font-family:Georgia,serif;font-style:italic}
 @keyframes bigIn{0%{transform:scale(.3) rotate(-8deg);opacity:0}12%{transform:scale(1.12) rotate(2deg);opacity:1}20%{transform:scale(1) rotate(0)}85%{opacity:1}100%{opacity:0;transform:scale(1.05)}}
 .carreau{position:absolute;left:0;right:0;top:40%;height:120px}
 .carreau .b1,.carreau .b2{position:absolute;top:30px;width:60px;height:60px;border-radius:50%;
@@ -598,7 +598,7 @@ function layer(ms, skippable) {
 }
 function bigText(html, cls, ms = 2300, skippable = false) {
   const l = layer(ms, skippable);
-  l.insertAdjacentHTML('afterbegin', `<div class="big ${cls}"><span>${html}</span></div>`);
+  l.insertAdjacentHTML('afterbegin', `<div class="bigfx ${cls}"><span>${html}</span></div>`);
 }
 function carreau() {
   const l = layer(1500, false);
