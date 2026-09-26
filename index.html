@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#B8471F">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Boules">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>Jeu de Boules</title>
+<style>
+:root{
+  --sand:#F4E6C8; --sand2:#E6CFA0; --card:#FFF9EC; --ink:#23160C; --ink2:#4A3424;
+  --terra:#B8471F; --terra-d:#7F2C0F; --olive:#4F5C1A; --olive-d:#323B0E;
+  --silver:#BAC1C7; --steel:#5E676F; --warn:#F08A00; --red:#C8161D; --gold:#D39A12;
+  --a:var(--terra); --a-d:var(--terra-d); --b:var(--olive); --b-d:var(--olive-d);
+  --head:var(--terra); --nav:var(--ink);
+  --r:18px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--sand);color:var(--ink);overflow:hidden;overscroll-behavior:none}
+body{font-family:ui-rounded,"SF Pro Rounded","Nunito",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  -webkit-user-select:none;user-select:none;touch-action:manipulation;-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
+#app{display:flex;flex-direction:column;height:100vh;height:100dvh;
+  padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+
+/* header */
+#top{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--head);color:#fff;
+  padding:calc(env(safe-area-inset-top) + 6px) 14px 8px}
+#title{background:none;border:0;padding:6px 0;font-size:21px;font-weight:900;letter-spacing:.3px;color:#fff;white-space:nowrap}
+#title .dot{display:inline-block;width:.7em;height:.7em;border-radius:50%;margin-right:6px;vertical-align:-1px;
+  background:radial-gradient(circle at 35% 30%,#fff,var(--silver) 40%,var(--steel))}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 12px;font-weight:900;
+  font-variant-numeric:tabular-nums;background:rgba(0,0,0,.28);color:#fff;font-size:16px;white-space:nowrap}
+.chip.warn{background:var(--warn);color:#1C0F00}.chip.danger{background:#fff;color:var(--red)}
+#totalClock[hidden]{display:none}
+
+/* main + nav */
+#view{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 14px 16px}
+#view.fit{display:flex;flex-direction:column;gap:9px;padding-top:10px;padding-bottom:10px}
+#tabs{display:grid;grid-template-columns:repeat(3,1fr);background:var(--nav);padding-bottom:env(safe-area-inset-bottom)}
+#tabs button{border:0;background:none;color:var(--sand);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;min-height:62px;font-size:14px;font-weight:800}
+#tabs button .ic{font-size:22px;line-height:1}
+#tabs button.on{background:var(--terra);color:#fff}
+
+/* generic */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:54px;padding:0 18px;border-radius:16px;border:0;
+  background:var(--terra);color:#fff;font-size:18px;font-weight:900;box-shadow:0 4px 0 var(--terra-d)}
+.btn:active,.pts button:active,.tbtn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.35)}
+.btn.big{width:100%;min-height:64px;font-size:22px}
+.btn.ghost{background:var(--card);color:var(--ink);box-shadow:0 4px 0 var(--sand2);border:2px solid var(--ink2)}
+.btn.olive{background:var(--olive);box-shadow:0 4px 0 var(--olive-d)}
+.btn.danger{background:var(--red);box-shadow:0 4px 0 #7E0A0E}
+.btn:disabled{opacity:.45}
+.card{background:var(--card);border-radius:var(--r);padding:14px;margin-bottom:12px;border:2px solid var(--sand2)}
+.card h3{margin:0 0 10px;font-size:15px;text-transform:uppercase;letter-spacing:.8px;color:var(--ink2)}
+h2{margin:4px 0 12px;font-size:24px}
+.muted{color:var(--ink2);font-weight:700}
+.row{display:flex;align-items:center;gap:10px}
+.spread{justify-content:space-between}
+
+/* avatar */
+.av{--s:40px;position:relative;display:inline-grid;place-items:center;flex:none;width:var(--s);height:var(--s);border-radius:50%;
+  background:var(--c);color:#fff;overflow:hidden;border:2px solid #fff;box-shadow:0 0 0 2px var(--ink)}
+.av b{font-size:calc(var(--s)*.46);font-weight:900;line-height:1}
+.av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.av.sm{--s:30px}.av.md{--s:48px}.av.lg{--s:76px}.av.xl{--s:128px}
+
+/* round screen */
+.pills{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.pill{border-radius:12px;padding:7px 4px;text-align:center;font-weight:900;font-size:14px;background:var(--card);border:2px solid var(--sand2);color:var(--ink2)}
+.pill.on{background:var(--ink);border-color:var(--ink);color:#fff;font-size:16px}
+.pill.done{border-color:var(--olive);color:var(--olive)}
+.timer{display:flex;align-items:center;gap:8px;background:var(--ink);color:#fff;border-radius:var(--r);padding:6px 6px 6px 14px}
+.timer .lbl{font-size:12px;font-weight:800;opacity:.8;text-transform:uppercase;letter-spacing:.8px}
+.tt{flex:1;font-size:42px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
+.timer.warn{background:var(--warn);color:#1C0F00}
+.timer.danger{background:var(--red);animation:pulse 1s infinite}
+@keyframes pulse{50%{filter:brightness(1.35)}}
+.tbtn{min-height:54px;min-width:78px;border-radius:14px;border:0;background:var(--sand);color:var(--ink);font-weight:900;font-size:17px;box-shadow:0 3px 0 rgba(0,0,0,.4)}
+.tbtn.go{background:#2E9E4A;color:#fff}
+.team{--tc:var(--a);--tcd:var(--a-d);background:var(--card);border-radius:var(--r);padding:10px;border:3px solid var(--tc);box-shadow:0 4px 0 var(--tcd)}
+.team.t1{--tc:var(--b);--tcd:var(--b-d)}
+.th{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.who{display:flex;flex-direction:column;gap:5px;min-width:0}
+.pl{display:flex;align-items:center;gap:8px;font-weight:900;font-size:18px;white-space:nowrap}
+.pl .av{--s:32px}
+.sc{font-size:clamp(58px,18vw,90px);font-weight:900;line-height:.85;color:var(--tc);font-variant-numeric:tabular-nums;padding-right:4px}
+.team.lead .sc{text-shadow:0 3px 0 rgba(0,0,0,.12)}
+.pts{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:9px}
+.pts button{min-height:54px;border-radius:14px;border:0;background:var(--tc);color:#fff;font-size:22px;font-weight:900;box-shadow:0 3px 0 var(--tcd);padding:0}
+.log{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;min-height:40px;align-items:center}
+.log::-webkit-scrollbar{display:none}
+.log .m{flex:none;border-radius:10px;padding:5px 9px;font-weight:900;font-size:15px;color:#fff;font-variant-numeric:tabular-nums;line-height:1.1;text-align:center}
+.log .m small{display:block;font-size:11px;opacity:.9}
+.log .m.t0{background:var(--a)}.log .m.t1{background:var(--b)}
+.log .hint{font-weight:700;color:var(--ink2);font-size:14px;padding:0 4px}
+.acts{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:auto}
+
+/* ranking */
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;background:var(--sand2);padding:4px;border-radius:14px;margin-bottom:12px}
+.seg button{border:0;background:none;min-height:46px;border-radius:11px;font-weight:900;font-size:17px;color:var(--ink)}
+.seg button.on{background:var(--ink);color:#fff}
+.rrow{display:grid;grid-template-columns:30px auto 1fr auto;align-items:center;gap:10px;background:var(--card);border-radius:16px;
+  padding:10px 12px;margin-bottom:8px;border:2px solid var(--sand2)}
+.rrow.first{border-color:var(--gold);box-shadow:0 3px 0 var(--gold)}
+.rrow .pos{font-size:26px;font-weight:900;text-align:center}
+.rrow .nm{font-weight:900;font-size:19px;min-width:0}
+.rrow .nm small{display:block;font-size:14px;font-weight:800;color:var(--ink2);margin-top:2px}
+.saldo{font-size:32px;font-weight:900;font-variant-numeric:tabular-nums;text-align:right}
+.saldo.pos{color:var(--olive)}.saldo.neg{color:var(--red)}
+.saldo small{display:block;font-size:11px;font-weight:800;color:var(--ink2);text-transform:uppercase;letter-spacing:.5px}
+.badge{display:inline-block;font-size:11px;font-weight:900;border-radius:6px;padding:2px 6px;margin-left:4px;vertical-align:2px;background:var(--ink);color:#fff}
+.live{display:inline-block;background:var(--red);color:#fff;border-radius:6px;padding:2px 7px;font-size:12px;font-weight:900;vertical-align:3px;animation:pulse 1.2s infinite}
+.res{display:flex;align-items:center;gap:8px;padding:10px 0;border-top:2px dashed var(--sand2);font-weight:800}
+.res:first-of-type{border-top:0}
+.res .rn{font-size:12px;font-weight:900;background:var(--ink);color:#fff;border-radius:6px;padding:3px 6px}
+.res .tm{flex:1;font-size:15px;line-height:1.25}
+.res .tm.w{font-weight:900}
+.res .sco{font-size:22px;font-weight:900;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hist{padding:10px 0;border-top:2px dashed var(--sand2)}
+.hist:first-of-type{border-top:0}
+
+/* start screen */
+.hero{text-align:center;padding:6px 0 12px}
+.hero h1{margin:0;font-size:34px;font-weight:900;color:var(--terra)}
+.hero p{margin:4px 0 0;font-weight:800;color:var(--ink2)}
+.four{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;text-align:center}
+.four div{font-weight:900;font-size:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.four .av{--s:64px}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 0}
+.opt+.opt{border-top:2px dashed var(--sand2);padding-top:12px;margin-top:6px}
+.opt label{font-weight:900;font-size:17px}
+.opt .seg{margin:0;min-width:180px}
+.step{display:flex;align-items:center;gap:6px}
+.step button{width:50px;height:50px;border-radius:14px;border:2px solid var(--ink);background:var(--card);font-size:26px;font-weight:900}
+.step output{min-width:76px;text-align:center;font-size:22px;font-weight:900;font-variant-numeric:tabular-nums}
+.sw{width:66px;height:38px;border-radius:99px;border:2px solid var(--ink);background:var(--sand2);position:relative;flex:none}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:28px;height:28px;border-radius:50%;background:var(--ink);transition:left .15s}
+.sw[aria-checked="true"]{background:var(--olive)}
+.sw[aria-checked="true"]::after{left:31px;background:#fff}
+.sched div{display:flex;gap:8px;align-items:center;font-weight:800;padding:5px 0}
+.sched b{background:var(--ink);color:#fff;border-radius:6px;padding:2px 7px;font-size:13px}
+.stack{display:grid;gap:12px}
+.empty{text-align:center;padding:40px 10px}
+.empty p{font-weight:800;font-size:18px}
+
+/* modal + toasts */
+#modal{position:fixed;inset:0;z-index:50;background:rgba(20,10,4,.55);display:flex;align-items:flex-end;justify-content:center;
+  padding:16px 16px calc(16px + env(safe-area-inset-bottom))}
+#modal[hidden]{display:none}
+.sheet{background:var(--card);border-radius:22px;padding:20px;width:100%;max-width:460px;border:3px solid var(--ink);animation:up .18s ease-out}
+.sheet h2{margin:0 0 8px;font-size:26px}
+.sheet p{margin:0 0 18px;font-size:18px;font-weight:700;line-height:1.35}
+.mbtns{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:10px}
+@keyframes up{from{transform:translateY(30px);opacity:0}}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:40;overflow:hidden}
+.toast{position:absolute;left:50%;top:calc(env(safe-area-inset-top) + 70px);transform:translateX(-50%);background:var(--ink);color:#fff;
+  font-weight:900;font-size:20px;padding:12px 20px;border-radius:16px;white-space:nowrap;animation:toast 2s ease forwards}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,-12px)}10%,80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+</style>
+</head>
+<body>
+<div id="app">
+  <header id="top">
+    <button id="title" aria-label="Jeu de Boules"><span class="dot"></span>Jeu de Boules</button>
+    <div id="totalClock" class="chip" hidden></div>
+  </header>
+  <main id="view"></main>
+  <nav id="tabs">
+    <button data-tab="start"><span class="ic">🏁</span>Start</button>
+    <button data-tab="round"><span class="ic">⚪</span><span id="roundTabLbl">Ronde</span></button>
+    <button data-tab="rank"><span class="ic">🏆</span>Klassement</button>
+  </nav>
+</div>
+<div id="modal" hidden></div>
+<div id="fx"></div>
+
+<script>
+'use strict';
+/* ---------- data ---------- */
+const PLAYERS = [
+  { id: 'sos',      name: 'Sos',      color: '#B8471F' },
+  { id: 'dollo',    name: 'Dollo',    color: '#4F5C1A' },
+  { id: 'tobihash', name: 'Tobihash', color: '#2B5A86' },
+  { id: 'mrneus',   name: 'mr neus',  color: '#7A3B8C' },
+];
+const P = Object.fromEntries(PLAYERS.map(p => [p.id, p]));
+const SCHEDULE = [
+  [['sos', 'dollo'],    ['tobihash', 'mrneus']],
+  [['sos', 'tobihash'], ['dollo', 'mrneus']],
+  [['sos', 'mrneus'],   ['dollo', 'tobihash']],
+];
+const KEY = 'boules-state-v1';
+const DEFAULTS = {
+  settings: { target: 11, roundMin: 25, totalMin: 90, losersZero: false, retro: false },
+  t: null, history: [], tab: 'start', rankTab: 'now',
+};
+
+let S = load();
+function load() {
+  try {
+    const s = JSON.parse(localStorage.getItem(KEY));
+    if (s) return { ...structuredClone(DEFAULTS), ...s, settings: { ...DEFAULTS.settings, ...s.settings } };
+  } catch (e) {}
+  return structuredClone(DEFAULTS);
+}
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+
+/* hooks filled in by the extras (easter eggs, end screen) */
+const FX = { mene() {}, roundClosed() {}, finished() {}, titleTap() {} };
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const failed = new Set(JSON.parse(sessionStorage.getItem('imgFail') || '[]'));
+function imgFail(img) {
+  failed.add(img.dataset.p);
+  try { sessionStorage.setItem('imgFail', JSON.stringify([...failed])); } catch (e) {}
+  img.remove();
+}
+function av(id, cls = '') {
+  const p = P[id];
+  return `<span class="av ${cls}" style="--c:${p.color}"><b>${p.name[0].toUpperCase()}</b>${
+    failed.has(id) ? '' : `<img src="players/${id}.jpg" alt="" data-p="${id}" onerror="imgFail(this)">`}</span>`;
+}
+const teamName = team => team.map(id => P[id].name).join(' & ');
+const score = r => r.menes.reduce((s, m) => (s[m.team] += m.pts, s), [0, 0]);
+const sign = n => n > 0 ? '+' + n : n < 0 ? '−' + Math.abs(n) : '0';
+function fmt(ms) {
+  const neg = ms < 0, t = Math.ceil(Math.abs(ms) / 1000);
+  return (neg ? '+' : '') + String(Math.floor(t / 60)).padStart(2, '0') + ':' + String(t % 60).padStart(2, '0');
+}
+function toast(txt, cls = '') {
+  const d = document.createElement('div');
+  d.className = 'toast ' + cls; d.textContent = txt;
+  $('#fx').appendChild(d); setTimeout(() => d.remove(), 2100);
+}
+function ask({ title, body = '', ok = 'OK', cancel = 'Annuleer', danger = false }) {
+  return new Promise(res => {
+    const m = $('#modal');
+    m.innerHTML = `<div class="sheet" role="dialog" aria-modal="true"><h2>${title}</h2>${body ? `<p>${body}</p>` : ''}
+      <div class="mbtns">${cancel ? `<button class="btn ghost" data-m="0">${cancel}</button>` : ''}
+      <button class="btn ${danger ? 'danger' : ''}" data-m="1">${ok}</button></div></div>`;
+    m.hidden = false;
+    m.onclick = e => {
+      const b = e.target.closest('[data-m]');
+      if (!b) return;
+      m.hidden = true; m.onclick = null; res(b.dataset.m === '1');
+    };
+  });
+}
+
+/* ---------- standings ---------- */
+function standings(t, losersZero = S.settings.losersZero) {
+  const st = {}, h2h = {};
+  PLAYERS.forEach(p => st[p.id] = { id: p.id, saldo: 0, w: 0, l: 0, d: 0, pf: 0, pa: 0, fanny: 0, played: 0 });
+  t.rounds.forEach((r, i) => {
+    if (!r.done && !r.menes.length) return;       // not started: doesn't count
+    const sc = score(r), diff = Math.abs(sc[0] - sc[1]);
+    const lead = sc[0] > sc[1] ? 0 : sc[1] > sc[0] ? 1 : -1;
+    SCHEDULE[i].forEach((team, ti) => {
+      const my = sc[ti], op = sc[1 - ti];
+      const pts = lead === -1 ? 0 : lead === ti ? diff : (losersZero ? 0 : -diff);
+      team.forEach(pid => {
+        const s = st[pid];
+        s.saldo += pts; s.pf += my; s.pa += op;
+        if (r.done) {
+          s.played++;
+          if (lead === -1) s.d++;
+          else if (lead === ti) s.w++;
+          else { s.l++; if (my === 0) s.fanny++; }
+        }
+        SCHEDULE[i][1 - ti].forEach(o => h2h[pid + '|' + o] = (h2h[pid + '|' + o] || 0) + pts);
+      });
+    });
+  });
+  const hh = (a, b) => (h2h[b.id + '|' + a.id] || 0) - (h2h[a.id + '|' + b.id] || 0);
+  const arr = Object.values(st).sort((a, b) => b.saldo - a.saldo || b.pf - a.pf || hh(a, b));
+  arr.forEach((s, i) => {
+    const p = arr[i - 1];
+    s.pos = p && p.saldo === s.saldo && p.pf === s.pf && hh(p, s) === 0 ? p.pos : i + 1;
+  });
+  return arr;
+}
+function allTime() {
+  const st = {};
+  PLAYERS.forEach(p => st[p.id] = { id: p.id, saldo: 0, w: 0, l: 0, d: 0, pf: 0, pa: 0, fanny: 0, wins: 0, n: 0 });
+  S.history.forEach(h => {
+    h.standings.forEach(s => {
+      const a = st[s.id]; if (!a) return;
+      ['saldo', 'w', 'l', 'd', 'pf', 'pa', 'fanny'].forEach(k => a[k] += s[k] || 0);
+      a.n++;
+    });
+    if (h.winner && st[h.winner]) st[h.winner].wins++;
+  });
+  const arr = Object.values(st).sort((a, b) => b.saldo - a.saldo || b.wins - a.wins || b.pf - a.pf);
+  arr.forEach((s, i) => { const p = arr[i - 1]; s.pos = p && p.saldo === s.saldo && p.wins === s.wins && p.pf === s.pf ? p.pos : i + 1; });
+  return arr;
+}
+
+/* ---------- tournament actions ---------- */
+const newRound = () => ({ menes: [], done: false, acc: 0, since: null, endedBy: null });
+function startTournament() {
+  S.t = { id: Date.now(), startedAt: Date.now(), current: 0, finished: false, rounds: SCHEDULE.map(newRound) };
+  S.tab = 'round'; save(); render(); wake();
+}
+const curRound = () => S.t && !S.t.finished ? S.t.rounds[S.t.current] : null;
+const roundLeft = r => S.settings.roundMin * 60000 - (r.acc + (r.since ? Date.now() - r.since : 0));
+function pauseTimer(r) { if (r.since) { r.acc += Date.now() - r.since; r.since = null; } }
+
+async function addMene(ti, pts) {
+  const r = curRound(); if (!r || r.done) return;
+  r.menes.push({ team: ti, pts, at: Date.now() });
+  save(); render();
+  const sc = score(r), tgt = S.settings.target;
+  const reached = sc[0] >= tgt || sc[1] >= tgt;
+  FX.mene(ti, pts, sc, reached);
+  if (reached) {
+    const w = sc[0] >= tgt ? 0 : 1;
+    const ok = await ask({ title: `${teamName(SCHEDULE[S.t.current][w])} ${sc[w]}!`,
+      body: `Doelscore ${tgt} bereikt. Stand ${sc[0]}–${sc[1]}. Ronde afsluiten?`,
+      ok: 'Ronde afsluiten', cancel: 'Oeps, undo' });
+    if (ok) closeRound('doel'); else undo(true);
+  }
+}
+async function undo(silent) {
+  const t = S.t; if (!t || t.finished) return;
+  const r = t.rounds[t.current];
+  if (r.menes.length) { r.menes.pop(); save(); render(); if (!silent) toast('↶ Laatste mène weg'); return; }
+  if (t.current > 0) {
+    const prev = t.rounds[t.current - 1], sc = score(prev);
+    if (await ask({ title: `Ronde ${t.current} heropenen?`, body: `Die eindigde ${sc[0]}–${sc[1]}. Je gaat terug naar die ronde.`, ok: 'Heropenen' })) {
+      pauseTimer(r); t.current--; prev.done = false; prev.endedBy = null; save(); render();
+    }
+  }
+}
+function closeRound(reason) {
+  const t = S.t, r = t.rounds[t.current];
+  pauseTimer(r); r.done = true; r.endedBy = reason;
+  const idx = t.current, sc = score(r);
+  if (t.current < SCHEDULE.length - 1) { t.current++; save(); render(); toast(`Ronde ${t.current + 1} — ${teamName(SCHEDULE[t.current][0])} vs ${teamName(SCHEDULE[t.current][1])}`); }
+  else finishTournament();
+  FX.roundClosed(idx, sc);
+}
+function finishTournament() {
+  const t = S.t;
+  t.finished = true; t.finishedAt = Date.now();
+  t.rounds.forEach(pauseTimer);
+  const st = standings(t);
+  t.final = st;
+  S.history.push({
+    id: t.id, date: t.startedAt, winner: st[0].id, losersZero: S.settings.losersZero,
+    standings: st.map(s => ({ ...s })),
+    rounds: t.rounds.map((r, i) => ({ teams: SCHEDULE[i], score: score(r), played: r.done })),
+  });
+  S.tab = 'round'; save(); render(); releaseWake();
+  FX.finished(st);
+}
+async function endNow() {
+  const t = S.t; if (!t || t.finished) return;
+  const r = t.rounds[t.current], sc = score(r);
+  const body = r.menes.length
+    ? `Ronde ${t.current + 1} telt mee met de huidige stand ${sc[0]}–${sc[1]}. Rondes daarna vervallen.`
+    : `Ronde ${t.current + 1}${t.current < 2 ? ' en verder' : ''} ${t.current < 2 ? 'vervallen' : 'vervalt'}.`;
+  if (!await ask({ title: 'Eindstand nu?', body, ok: 'Afsluiten' })) return;
+  if (r.menes.length) { pauseTimer(r); r.done = true; r.endedBy = 'vroeg'; }
+  finishTournament();
+}
+
+/* ---------- timer ---------- */
+let lastVib = null, timeUpOpen = false;
+async function timeUp(r) {
+  if (timeUpOpen || r.done) return;
+  timeUpOpen = true;
+  navigator.vibrate?.([400, 150, 400, 150, 600]);
+  const sc = score(r), teams = SCHEDULE[S.t.current];
+  const body = sc[0] === sc[1] ? `Gelijkspel ${sc[0]}–${sc[1]}. Dat blijft gelijkspel.`
+    : `${teamName(teams[sc[0] > sc[1] ? 0 : 1])} staat voor en wint ${Math.max(...sc)}–${Math.min(...sc)}.`;
+  const ok = await ask({ title: '⏰ Tijd!', body, ok: 'Ronde afsluiten', cancel: 'Mène afmaken' });
+  timeUpOpen = false;
+  if (ok && curRound() === r && !r.done) closeRound('tijd');
+}
+function tick() {
+  const t = S.t, tc = $('#totalClock');
+  if (t && !t.finished) {
+    const left = S.settings.totalMin * 60000 - (Date.now() - t.startedAt);
+    tc.hidden = false;
+    tc.textContent = (left < 0 ? 'Totaal over ' : 'Totaal ') + fmt(left).replace('+', '');
+    tc.className = 'chip' + (left <= 0 ? ' danger' : left <= 10 * 60000 ? ' warn' : '');
+  } else tc.hidden = true;
+  const r = curRound(); if (!r) return;
+  let left = roundLeft(r);
+  if (r.since && left <= 0) { r.acc = S.settings.roundMin * 60000; r.since = null; left = 0; save(); updTimerBtn(r); timeUp(r); }
+  if (r.since && left > 0 && left <= 30000) {
+    const sec = Math.ceil(left / 1000);
+    if (sec !== lastVib && (sec % 5 === 0 || sec <= 5)) { lastVib = sec; navigator.vibrate?.(sec <= 5 ? 150 : 80); }
+  }
+  const box = $('#timer'); if (!box) return;
+  $('#tt').textContent = fmt(Math.max(0, left));
+  box.className = 'timer' + (left <= 30000 ? ' danger' : left <= 120000 ? ' warn' : '');
+}
+function updTimerBtn(r) {
+  const b = $('#tbtn'); if (!b) return;
+  b.textContent = r.since ? 'Pauze' : roundLeft(r) <= 0 ? 'Klaar' : 'Start';
+  b.classList.toggle('go', !r.since);
+}
+setInterval(tick, 250);
+
+/* ---------- wake lock ---------- */
+let wl = null;
+async function wake() {
+  try {
+    if ('wakeLock' in navigator && !wl && document.visibilityState === 'visible' && S.t && !S.t.finished) {
+      wl = await navigator.wakeLock.request('screen');
+      wl.addEventListener('release', () => wl = null);
+    }
+  } catch (e) {}
+}
+function releaseWake() { try { wl?.release(); } catch (e) {} wl = null; }
+document.addEventListener('visibilitychange', wake);
+
+/* ---------- views ---------- */
+function vStart() {
+  const st = S.settings, t = S.t, active = t && !t.finished;
+  return `<div class="hero"><h1>Jeu de Boules</h1><p>Americano · 4 spelers · 3 rondes</p></div>
+  <div class="four">${PLAYERS.map(p => `<div>${av(p.id)}${p.name}</div>`).join('')}</div>
+  ${active ? `<div class="stack" style="margin-bottom:14px"><button class="btn big olive" data-act="tab" data-v="round">▶ Verder spelen · ronde ${t.current + 1}</button>
+     <button class="btn ghost" data-act="newT">Nieuw toernooi beginnen</button></div>`
+    : `<div style="margin-bottom:14px"><button class="btn big" data-act="start">Start</button></div>`}
+  <div class="card"><h3>Instellingen</h3>
+    <div class="opt"><label>Doelscore</label><div class="seg">${[9, 11, 13].map(n =>
+      `<button class="${st.target === n ? 'on' : ''}" data-act="set" data-k="target" data-v="${n}">${n}</button>`).join('')}</div></div>
+    <div class="opt"><label>Rondetijd</label><div class="step"><button data-act="step" data-k="roundMin" data-d="-1" aria-label="minder">−</button>
+      <output>${st.roundMin} min</output><button data-act="step" data-k="roundMin" data-d="1" aria-label="meer">+</button></div></div>
+    <div class="opt"><label>Totale tijd</label><div class="step"><button data-act="step" data-k="totalMin" data-d="-5" aria-label="minder">−</button>
+      <output>${st.totalMin} min</output><button data-act="step" data-k="totalMin" data-d="5" aria-label="meer">+</button></div></div>
+    <div class="opt"><label>Verliezers krijgen 0</label><button class="sw" role="switch" aria-checked="${st.losersZero}" data-act="toggleZero" aria-label="Verliezers krijgen 0"></button></div>
+  </div>
+  <div class="card sched"><h3>Speelschema</h3>${SCHEDULE.map((r, i) =>
+    `<div><b>R${i + 1}</b>${teamName(r[0])} <span class="muted">vs</span> ${teamName(r[1])}</div>`).join('')}</div>
+  <div class="card"><h3>Opnieuw</h3><div class="stack">
+    <button class="btn ghost" data-act="reset" ${t ? '' : 'disabled'}>Reset toernooi</button>
+    <button class="btn danger" data-act="wipe" ${S.history.length ? '' : 'disabled'}>Wis ook de historie (${S.history.length})</button>
+  </div><p class="muted" style="margin:10px 0 0;font-size:14px">Reset wist alleen het lopende toernooi. Het all-time klassement blijft staan.</p></div>`;
+}
+
+function vRound() {
+  const t = S.t;
+  if (!t) return `<div class="empty"><p>Nog geen toernooi bezig.</p><button class="btn big" data-act="start">Start toernooi</button></div>`;
+  if (t.finished) return vEnd();
+  const i = t.current, r = t.rounds[i], sc = score(r);
+  const lead = sc[0] > sc[1] ? 0 : sc[1] > sc[0] ? 1 : -1;
+  const team = ti => `<section class="team t${ti} ${lead === ti ? 'lead' : ''}">
+    <div class="th"><div class="who">${SCHEDULE[i][ti].map(id => `<div class="pl">${av(id)}<span>${P[id].name}</span></div>`).join('')}</div>
+    <div class="sc">${sc[ti]}</div></div>
+    <div class="pts">${[1, 2, 3, 4, 5, 6].map(n => `<button data-act="mene" data-t="${ti}" data-n="${n}" aria-label="${n} punt${n > 1 ? 'en' : ''}">+${n}</button>`).join('')}</div></section>`;
+  let run = [0, 0];
+  const log = r.menes.length ? r.menes.map((m, k) => {
+    run[m.team] += m.pts;
+    return `<div class="m t${m.team}"><small>#${k + 1} +${m.pts}</small>${run[0]}–${run[1]}</div>`;
+  }).join('') : `<span class="hint">Tik +punten bij het team dat de mène wint</span>`;
+  return `<div class="pills">${t.rounds.map((x, k) => {
+      const s = score(x);
+      return `<div class="pill ${k === i ? 'on' : ''} ${x.done ? 'done' : ''}">${x.done ? `✓ ${s[0]}–${s[1]}` : `Ronde ${k + 1}`}</div>`;
+    }).join('')}</div>
+  <div class="timer" id="timer"><div style="flex:1"><div class="lbl">Ronde ${i + 1} van 3</div><div class="tt" id="tt">--:--</div></div>
+    <button class="tbtn" id="tbtn" data-act="tToggle">Start</button><button class="tbtn" data-act="tReset" aria-label="Timer resetten">↺</button></div>
+  ${team(0)}
+  <div class="log" id="log">${log}</div>
+  ${team(1)}
+  <div class="acts"><button class="btn ghost" data-act="undo">↶ Undo</button><button class="btn olive" data-act="closeRound">Ronde afsluiten</button></div>`;
+}
+
+function rankRows(arr, { live = false, finished = false } = {}) {
+  return arr.map((s, i) => `<div class="rrow ${s.pos === 1 && (finished || arr.some(x => x.saldo)) ? 'first' : ''}">
+    <div class="pos">${s.pos}</div>${av(s.id, 'md')}
+    <div class="nm">${P[s.id].name}${s.fanny ? `<span class="badge">FANNY${s.fanny > 1 ? ' ×' + s.fanny : ''}</span>` : ''}
+      <small>${s.w}W ${s.l}V${s.d ? ' ' + s.d + 'G' : ''}<br>${s.pf} voor · ${s.pa} tegen</small></div>
+    <div class="saldo ${s.saldo > 0 ? 'pos' : s.saldo < 0 ? 'neg' : ''}">${sign(s.saldo)}<small>saldo</small></div></div>`).join('');
+}
+function resultsList(t) {
+  return t.rounds.map((r, i) => {
+    const sc = score(r), tm = SCHEDULE[i];
+    const state = r.done ? '' : r.menes.length ? ' <span class="live">LIVE</span>' : t.finished ? ' <span class="muted">niet gespeeld</span>' : ' <span class="muted">nog te spelen</span>';
+    return `<div class="res"><span class="rn">R${i + 1}</span>
+      <div class="tm ${r.done && sc[0] > sc[1] ? 'w' : ''}">${teamName(tm[0])}<br><span class="muted">vs</span> <span class="${r.done && sc[1] > sc[0] ? 'w' : ''}" style="${r.done && sc[1] > sc[0] ? 'font-weight:900' : ''}">${teamName(tm[1])}</span>${state}</div>
+      <div class="sco">${r.done || r.menes.length ? `${sc[0]}–${sc[1]}` : '–'}</div></div>`;
+  }).join('');
+}
+function vRank() {
+  const seg = `<div class="seg"><button class="${S.rankTab === 'now' ? 'on' : ''}" data-act="rankTab" data-v="now">Dit toernooi</button>
+    <button class="${S.rankTab === 'all' ? 'on' : ''}" data-act="rankTab" data-v="all">All-time</button></div>`;
+  if (S.rankTab === 'all') {
+    if (!S.history.length) return seg + `<div class="empty"><p>Nog geen afgeronde toernooien.</p></div>`;
+    const at = allTime();
+    return seg + `<p class="muted" style="margin:0 0 10px">${S.history.length} toernooi${S.history.length > 1 ? 'en' : ''} gespeeld</p>
+      ${at.map(s => `<div class="rrow ${s.pos === 1 ? 'first' : ''}"><div class="pos">${s.pos}</div>${av(s.id, 'md')}
+        <div class="nm">${P[s.id].name}${s.wins ? `<span class="badge" style="background:var(--gold);color:#1C0F00">🏆×${s.wins}</span>` : ''}${s.fanny ? `<span class="badge">FANNY ×${s.fanny}</span>` : ''}
+        <small>${s.w}W ${s.l}V${s.d ? ' ' + s.d + 'G' : ''}<br>${s.pf} voor · ${s.pa} tegen</small></div>
+        <div class="saldo ${s.saldo > 0 ? 'pos' : s.saldo < 0 ? 'neg' : ''}">${sign(s.saldo)}<small>saldo</small></div></div>`).join('')}
+      <div class="card" style="margin-top:14px"><h3>Gespeelde toernooien</h3>${S.history.slice().reverse().map(h =>
+        `<div class="hist"><div class="row spread"><b>${new Date(h.date).toLocaleDateString('nl-NL', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}</b>
+          <span class="row" style="gap:6px">🏆 ${av(h.winner, 'sm')} <b>${P[h.winner].name}</b></span></div>
+          <div class="muted" style="font-size:14px;margin-top:4px">${h.standings.map(s => `${P[s.id].name} ${sign(s.saldo)}`).join(' · ')}</div></div>`).join('')}</div>`;
+  }
+  const t = S.t;
+  if (!t) return seg + `<div class="empty"><p>Geen lopend toernooi.</p><button class="btn" data-act="start">Start toernooi</button></div>`;
+  const live = !t.finished && t.rounds[t.current].menes.length > 0;
+  return seg + `<h2>${t.finished ? 'Eindstand' : 'Stand'} ${live ? '<span class="live">LIVE</span>' : ''}</h2>
+    ${rankRows(standings(t), { finished: t.finished })}
+    <div class="card" style="margin-top:14px"><h3>Uitslagen per ronde</h3>${resultsList(t)}</div>
+    ${t.finished ? '' : `<button class="btn big ghost" data-act="endNow">🏁 Eindstand nu</button>`}`;
+}
+
+function vEnd() {
+  const t = S.t, st = standings(t);
+  return `<div class="hero"><p>Toernooi afgelopen</p><h1>🏆 ${P[st[0].id].name}</h1></div>
+    ${rankRows(st, { finished: true })}
+    <div class="stack" style="margin-top:14px"><button class="btn big" data-act="newT">Nieuw toernooi</button></div>`;
+}
+
+/* ---------- render + events ---------- */
+function render() {
+  document.body.classList.toggle('retro', !!S.settings.retro);
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === S.tab));
+  $('#roundTabLbl').textContent = S.t?.finished ? 'Uitslag' : S.t ? `Ronde ${S.t.current + 1}` : 'Ronde';
+  const v = $('#view');
+  v.className = S.tab === 'round' && S.t && !S.t.finished ? 'fit' : '';
+  v.innerHTML = S.tab === 'start' ? vStart() : S.tab === 'round' ? vRound() : vRank();
+  const lg = $('#log'); if (lg) lg.scrollLeft = lg.scrollWidth;
+  const r = curRound(); if (r) updTimerBtn(r);
+  tick();
+}
+
+const ACTIONS = {
+  tab: b => { S.tab = b.dataset.v; save(); render(); $('#view').scrollTop = 0; },
+  start: () => startTournament(),
+  newT: async () => {
+    if (S.t && !S.t.finished && !await ask({ title: 'Nieuw toernooi?', body: 'Het lopende toernooi wordt gewist (niet opgeslagen).', ok: 'Nieuw', danger: true })) return;
+    startTournament();
+  },
+  set: b => { S.settings[b.dataset.k] = +b.dataset.v; save(); render(); },
+  step: b => {
+    const k = b.dataset.k, lim = k === 'roundMin' ? [1, 90] : [10, 240];
+    S.settings[k] = Math.min(lim[1], Math.max(lim[0], S.settings[k] + +b.dataset.d)); save(); render();
+  },
+  toggleZero: () => { S.settings.losersZero = !S.settings.losersZero; save(); render(); },
+  mene: b => addMene(+b.dataset.t, +b.dataset.n),
+  undo: () => undo(),
+  closeRound: async () => {
+    const r = curRound(), sc = score(r);
+    if (!r.menes.length) return toast('Nog geen mènes gespeeld');
+    const tm = SCHEDULE[S.t.current];
+    const who = sc[0] === sc[1] ? 'Gelijkspel' : `${teamName(tm[sc[0] > sc[1] ? 0 : 1])} wint`;
+    if (await ask({ title: 'Ronde afsluiten?', body: `${who}, ${sc[0]}–${sc[1]}.`, ok: 'Afsluiten' })) closeRound('hand');
+  },
+  tToggle: () => {
+    const r = curRound(); if (!r) return;
+    if (r.since) pauseTimer(r); else if (roundLeft(r) > 0) r.since = Date.now(); else return toast('Tijd is op — reset de klok');
+    save(); updTimerBtn(r); tick(); wake();
+  },
+  tReset: async () => {
+    const r = curRound(); if (!r) return;
+    if (await ask({ title: 'Klok resetten?', body: `Terug naar ${S.settings.roundMin}:00.`, ok: 'Reset' })) { r.acc = 0; r.since = null; lastVib = null; save(); render(); }
+  },
+  rankTab: b => { S.rankTab = b.dataset.v; save(); render(); },
+  endNow: () => endNow(),
+  reset: async () => {
+    if (await ask({ title: 'Reset toernooi?', body: 'Het lopende toernooi wordt gewist. Het all-time klassement blijft staan.', ok: 'Reset', danger: true })) {
+      S.t = null; save(); releaseWake(); render(); toast('Toernooi gereset');
+    }
+  },
+  wipe: async () => {
+    if (await ask({ title: 'Historie wissen?', body: `Alle ${S.history.length} opgeslagen toernooien en het all-time klassement verdwijnen. Dit kan niet terug.`, ok: 'Wissen', danger: true })) {
+      S.history = []; save(); render(); toast('Historie gewist');
+    }
+  },
+};
+document.addEventListener('click', e => {
+  const tab = e.target.closest('#tabs button');
+  if (tab) { S.tab = tab.dataset.tab; save(); render(); $('#view').scrollTop = 0; return; }
+  if (e.target.closest('#title')) return FX.titleTap();
+  const b = e.target.closest('[data-act]');
+  if (b && !b.disabled) ACTIONS[b.dataset.act]?.(b);
+  wake();
+});
+// keep the round timer honest when coming back to the app
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') tick(); });
+
+render();
+if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+</script>
+</body>
+</html>
